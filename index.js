@@ -1,14 +1,16 @@
 const express = require('express');
 
 const app = express();
+const router = express.Router({
+    caseSensitive: true,
+});
 
-app.use(express.text());
+app.use(router);
 
-app.get('/', (req, res) => {
+router.get('/about', (req, res) => {
     res.send('This is home page');
 });
-app.post('/', (req, res) => {
-    console.log(req.body);
+router.post('/', (req, res) => {
     res.send('This is home page using POST method');
 });
 app.listen(3000, () => {
