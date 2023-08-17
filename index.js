@@ -5,11 +5,39 @@ const handler = require('./handler');
 const app = express(); // the main app
 const admin = express();
 // app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 
-// app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 
-admin.get('/user/:id', (req, res) => {
+app.get('/user/', (req, res) => {
+    res.json({
+        name: 'Shohagh',
+    });
+    // console.log(res.headersSent);
+    // res.send('Hello Shohagh');
+    // res.end();
+    // console.log(res.headersSent);
+});
+/* app.get('/user/', (req, res) => {
+    console.log(res.headersSent);
+    res.render('page/about', {
+        name: 'Shohagh',
+        title: 'about page'
+    });
+    console.log(res.headersSent);
+}); */
+
+// app.get('/user/', handler);
+
+app.post('/user/', (req, res) => {
+    console.log(req.body);
+    console.log(req.route);
+    res.send('Hello World');
+});
+
+app.use('/admin', admin);
+
+/* admin.get('/user/:id', (req, res) => {
     // console.log(req.originalUrl);
     // console.log(req.url);
     // console.log(req.path);
@@ -21,8 +49,8 @@ admin.get('/user/:id', (req, res) => {
     // console.log(req.query);
     res.send('Amin Dashboard');
 });
+ */
 
-app.get('/user/', handler);
 /* 
 app.get('/user/:id', (req, res) => {
     console.log(req.originalUrl);
@@ -39,13 +67,6 @@ app.get('/user/:id', (req, res) => {
     res.send('Hello World');
 }); */
 
-app.post('/user/', (req, res) => {
-    console.log(req.body);
-    console.log(req.route);
-    res.send('Hello World');
-});
-
-app.use('/admin', admin);
 
 
 /* 
