@@ -4,17 +4,34 @@ const cookieParser = require('cookie-parser');
 
 const app = express(); // the main app
 const adminRouter = express.Router();
+app.use(cookieParser());
+app.use(express.json());
 
-const looger = (req, res, next) => {
+const loggerWrapper = (option) =>
+    function (req, res, next) {
+        if (option.log) {
+            console.log(
+                `${new Date(Date.now()).toLocaleString()} - ${req.method} - ${req.originalUrl} - ${
+                    req.protocol
+                } - ${req.ip}`
+            );
+            next();
+        } else {
+            throw new Error('This is an error');
+        }
+    };
+
+/* const looger = (req, res, next) => {
     console.log(
         `${new Date(Date.now()).toLocaleString()} - ${req.method} - ${req.originalUrl} - ${
             req.protocol
-        } - ${req.ip}`,
+        } - ${req.ip}`
     );
-    next();
-};
+    // next();
+    throw new Error('This is an error');
+}; */
 
-adminRouter.use(looger);
+adminRouter.use(loggerWrapper({ log: false }));
 
 adminRouter.get('/dashboard/', (req, res) => {
     res.send('This is admin Dashboard');
@@ -25,6 +42,13 @@ app.use('/admin/', adminRouter);
 app.get('/about/', (req, res) => {
     res.send('This is about');
 });
+
+const errorMiddleware = (err, req, res, next) => {
+    console.log(err.message);
+    res.status(500).send('There was a server side error!');
+};
+
+app.use(errorMiddleware);
 // const admin = express();
 // app.use(express.json());
 // app.use(cookieParser());
