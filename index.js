@@ -1,23 +1,81 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const handler = require('./handler');
+// const handler = require('./handler');
 
 const app = express(); // the main app
-const admin = express();
+const adminRouter = express.Router();
+
+const looger = (req, res, next) => {
+    console.log(
+        `${new Date(Date.now()).toLocaleString()} - ${req.method} - ${req.originalUrl} - ${
+            req.protocol
+        } - ${req.ip}`,
+    );
+    next();
+};
+
+adminRouter.use(looger);
+
+adminRouter.get('/dashboard/', (req, res) => {
+    res.send('This is admin Dashboard');
+});
+
+app.use('/admin/', adminRouter);
+
+app.get('/about/', (req, res) => {
+    res.send('This is about');
+});
+// const admin = express();
 // app.use(express.json());
 // app.use(cookieParser());
 
-app.set('view engine', 'ejs');
+/* app.set('view engine', 'ejs');
+
+app.get('/test/', (req, res) => {
+    res.location('/test/');
+    res.send('Hello Shohagh');
+});
 
 app.get('/user/', (req, res) => {
-    res.json({
-        name: 'Shohagh',
+
+    res.set('codedBy', 'Shohagh');
+    console.log(res.get('codedBy'));
+    res.end()
+    // res.location('/test/');;
+    // res.redirect('/test/');
+
+    // res.end();
+
+    // res.cookie('Shohagh', 'DesignerAndDeveloper', {});
+    // res.end();
+
+   res.format({
+        'text/plain': () => {
+            res.send('hi');
+        },
+        'text/html': () => {
+            res.render('page/about', {
+                title: 'About',
+                name: 'Mmh Shohagh',
+            });
+        },
+        'application/json': () => {
+            res.json({message: 'About',});
+        },
+        default: () => {
+            res.status(406).send('Not Acceptable');
+        }
     });
+
+    // res.sendStatus(403);
+    // res.json({
+    //     name: 'Shohagh',
+    // });
     // console.log(res.headersSent);
     // res.send('Hello Shohagh');
     // res.end();
     // console.log(res.headersSent);
-});
+}); */
 /* app.get('/user/', (req, res) => {
     console.log(res.headersSent);
     res.render('page/about', {
@@ -29,13 +87,13 @@ app.get('/user/', (req, res) => {
 
 // app.get('/user/', handler);
 
-app.post('/user/', (req, res) => {
+/* app.post('/user/', (req, res) => {
     console.log(req.body);
     console.log(req.route);
     res.send('Hello World');
 });
 
-app.use('/admin', admin);
+app.use('/admin', admin); */
 
 /* admin.get('/user/:id', (req, res) => {
     // console.log(req.originalUrl);
@@ -51,7 +109,7 @@ app.use('/admin', admin);
 });
  */
 
-/* 
+/*
 app.get('/user/:id', (req, res) => {
     console.log(req.originalUrl);
     console.log(req.url);
@@ -67,9 +125,7 @@ app.get('/user/:id', (req, res) => {
     res.send('Hello World');
 }); */
 
-
-
-/* 
+/*
 app.set('view engine', 'ejs');
 
 app.route('/user/designer')
