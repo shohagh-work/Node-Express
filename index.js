@@ -1,14 +1,31 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
+const mongoose = require('mongoose');
+// const multer = require('multer');
+// const path = require('path');
 // const fs = require('fs');
 // const publicRouter = require('./publicRouter');
 // const adminRouter = require('./adminRouter');
 // const cookieParser = require('cookie-parser');
 // const handler = require('./handler');
+// db.products.insertMany([{name: 'HP Pavilion', price: 80000, category: 'notebook', active: true}, {name: 'Dell Inspiration', price: 45000, category: 'notebook', active: false}, {name: 'Samsung Note S23', price: 150000, category: 'smartphone', active: true}])
 
+const app = express();
+app.use(express.json);
+
+// default error handler
+app.use((err, req, res, next) => {
+    if (err) {
+        if (err instanceof multer.MulterError) {
+            res.status(500).send('There was an upload error!');
+        } else {
+            res.status(500).send(err.message);
+        }
+    } else {
+        res.send('success');
+    }
+});
 // file upload folder
-const UPLOADS_FOLDER = './uploads/';
+/* const UPLOADS_FOLDER = './uploads/';
 
 // storage object
 const Storage = multer.diskStorage({
@@ -36,9 +53,9 @@ const upload = multer({
         console.log(file);
         if (file.fieldname === 'avatar') {
             if (
-                file.mimetype === 'image/png' ||
-                file.mimetype === 'image/jpg' ||
-                file.mimetype === 'image/jpeg'
+                file.mimetype === 'image/png'
+                || file.mimetype === 'image/jpg'
+                || file.mimetype === 'image/jpeg'
             ) {
                 cb(null, true);
             } else {
@@ -67,24 +84,11 @@ app.post(
     (req, res) => {
         console.log(req.files);
         res.send('Hello World');
-    }
-);
+    },
+); */
 /* app.post('/', upload.single('avatar'), (req, res) => {
     res.send('Hello World');
 }); */
-
-// default error handler
-app.use((err, req, res, next) => {
-    if (err) {
-        if (err instanceof multer.MulterError) {
-            res.status(500).send('There was an upload error!');
-        } else {
-            res.status(500).send(err.message);
-        }
-    } else {
-        res.send('success');
-    }
-});
 /* app.get('/', [
     (req, res, next) => {
         setTimeout(() => {
