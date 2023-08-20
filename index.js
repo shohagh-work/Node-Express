@@ -13,17 +13,17 @@ const app = express();
 app.use(express.json);
 
 // default error handler
-app.use((err, req, res, next) => {
-    if (err) {
-        if (err instanceof multer.MulterError) {
-            res.status(500).send('There was an upload error!');
-        } else {
-            res.status(500).send(err.message);
-        }
-    } else {
-        res.send('success');
-    }
-});
+// app.use((err, req, res, next) => {
+//     if (err) {
+//         if (err instanceof multer.MulterError) {
+//             res.status(500).send('There was an upload error!');
+//         } else {
+//             res.status(500).send(err.message);
+//         }
+//     } else {
+//         res.send('success');
+//     }
+// });
 // file upload folder
 /* const UPLOADS_FOLDER = './uploads/';
 
