@@ -14,7 +14,7 @@ const publicRouter = express.Router();
 // });
 
 publicRouter.param((param, option) => (req, res, next, val) => {
-    if (option === val) {
+    if (option === param) {
         console.log();
         next();
     } else {
