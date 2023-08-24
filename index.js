@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 // const adminRouter = require('./adminRouter');
 // const cookieParser = require('cookie-parser');
 // const handler = require('./handler');
+
 // db.products.insertMany([{name: 'HP Pavilion', price: 80000, category: 'notebook', active: true}, {name: 'Dell Inspiration', price: 45000, category: 'notebook', active: false}, {name: 'Samsung Note S23', price: 150000, category: 'smartphone', active: true}])
 
 const app = express();
