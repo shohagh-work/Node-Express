@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const todoHandler = require('./routeHandler/todoHandler');
 // const multer = require('multer');
 // const path = require('path');
 // const fs = require('fs');
@@ -8,11 +9,29 @@ const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 // const handler = require('./handler');
 
-// db.products.insertMany([{name: 'HP Pavilion', price: 80000, category: 'notebook', active: true}, {name: 'Dell Inspiration', price: 45000, category: 'notebook', active: false}, {name: 'Samsung Note S23', price: 150000, category: 'smartphone', active: true}])
-
+// express app initialization
 const app = express();
-app.use(express.json);
+app.use(express.json());
 
+// database connection with mongoose
+mongoose
+    .connect('mongodb://0.0.0.0:27017/todos', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('connection successfull!'))
+    .catch((err) => console.log(err));
+
+// application routes
+app.use('/todo', todoHandler);
+
+app.listen(3000, () => {
+    console.log('listening on port 3000');
+});
+
+// default error handler
+
+// default error handler
 // default error handler
 // app.use((err, req, res, next) => {
 //     if (err) {
@@ -327,6 +346,6 @@ app.get('/user/:id', (req, res) => {
 });
  */
 
-app.listen(3000, () => {
-    console.log('listening on port 3000');
-});
+// app.listen(3000, () => {
+//     console.log('listening on port 3000');
+// });
