@@ -11,7 +11,7 @@ const todoHandler = require('./routeHandler/todoHandler');
 
 // express app initialization
 const app = express();
-// app.use(express.json);
+app.use(express.json());
 
 // database connection with mongoose
 mongoose
@@ -23,7 +23,6 @@ mongoose
     .catch((err) => console.log(err));
 
 // application routes
-
 app.use('/todo', todoHandler);
 
 app.listen(3000, () => {
