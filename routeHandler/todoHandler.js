@@ -5,10 +5,13 @@ const router = express.Router();
 const todoSchema = require('../schemas/todoSchema');
 
 const Todo = new mongoose.model('Todo', todoSchema);
+const checkLogin = require('../middlewares/checkLogin');
 
 // Get a todo by static method [findByJS]
-router.get('/js/', async (req, res) => {
+router.get('/js/', checkLogin, async (req, res) => {
     try {
+        console.log(req.username);
+        console.log(req.userId);
         const data = await Todo.findByJS();
         console.log(data);
         res.status(200).json({
