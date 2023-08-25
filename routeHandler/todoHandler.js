@@ -6,6 +6,22 @@ const todoSchema = require('../schemas/todoSchema');
 
 const Todo = new mongoose.model('Todo', todoSchema);
 
+// Get a todo by static method [findByJS]
+router.get('/js/', async (req, res) => {
+    try {
+        const data = await Todo.findByJS();
+        console.log(data);
+        res.status(200).json({
+            message: 'finally get result!',
+            output: data,
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'There was a problem in server side!',
+        });
+    }
+});
+
 // Get All the todos
 router.get('/', async (req, res) => {
     try {
@@ -29,6 +45,22 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Get a todo by instance method [findActive]
+router.get('/active/', async (req, res) => {
+    try {
+        const newTodo = new Todo();
+        const data = await newTodo.findActive();
+        console.log(await newTodo.findActive());
+        res.status(200).json({
+            message: 'finally get result!',
+            output: data,
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'There was a error in server side!',
+        });
+    }
+});
 // Get a todo by id
 router.get('/:id', async (req, res) => {
     try {
@@ -51,7 +83,6 @@ router.get('/:id', async (req, res) => {
         });
     }
 });
-
 // post todo
 router.post('/', async (req, res) => {
     const newTodo = new Todo(req.body);
@@ -94,7 +125,7 @@ router.put('/:id', async (req, res) => {
             {
                 new: true,
                 useFindAndModify: false,
-            }
+            },
         );
         console.log(updatedTodo);
         res.status(200).json({
@@ -120,7 +151,7 @@ router.delete('/:id', async (req, res) => {
             },
             {
                 useFindAndModify: false,
-            }
+            },
         );
         console.log(deletedTodo);
         res.status(200).json({
