@@ -22,6 +22,22 @@ router.get('/js/', async (req, res) => {
     }
 });
 
+// Get a todo by query helpers [byLanguage]
+router.get('/language/', async (req, res) => {
+    try {
+        const data = await Todo.find().byLanguage('react');
+        console.log(data);
+        res.status(200).json({
+            message: 'finally get result!',
+            output: data,
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'There was a problem in server side!',
+        });
+    }
+});
+
 // Get All the todos
 router.get('/', async (req, res) => {
     try {
@@ -125,7 +141,7 @@ router.put('/:id', async (req, res) => {
             {
                 new: true,
                 useFindAndModify: false,
-            },
+            }
         );
         console.log(updatedTodo);
         res.status(200).json({
@@ -151,7 +167,7 @@ router.delete('/:id', async (req, res) => {
             },
             {
                 useFindAndModify: false,
-            },
+            }
         );
         console.log(deletedTodo);
         res.status(200).json({
