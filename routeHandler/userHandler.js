@@ -7,7 +7,30 @@ const router = express.Router();
 const userSchema = require('../schemas/userSchema');
 
 const User = new mongoose.model('User', userSchema);
+const checkLogin = require('../middlewares/checkLogin');
 
+// view users
+// Get All the todos
+router.get('/', checkLogin, async (req, res) => {
+    try {
+        const getUser = await User.find({})
+            .populate('todos', 'title')
+            .select({
+                _id: 0,
+                __v: 0,
+            })
+            .limit(5);
+        console.log(getUser);
+        res.status(200).json({
+            message: 'Find Users!',
+            output: getUser,
+        });
+    } catch (err) {
+        res.status(500).json({
+            error: 'There was a problem in server side!',
+        });
+    }
+});
 // signUp user
 router.post('/signup/', async (req, res) => {
     try {

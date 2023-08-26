@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 
 const router = express.Router();
 const todoSchema = require('../schemas/todoSchema');
+const userSchema = require('../schemas/userSchema');
+
+const User = new mongoose.model('User', userSchema);
 
 const Todo = new mongoose.model('Todo', todoSchema);
 const checkLogin = require('../middlewares/checkLogin');
@@ -42,16 +45,15 @@ router.get('/language/', async (req, res) => {
 });
 
 // Get All the todos
-router.get('/', async (req, res) => {
+router.get('/', checkLogin, async (req, res) => {
     try {
-        const getTodo = await Todo.find({
-            status: 'active',
-        })
+        const getTodo = await Todo.find({})
+            .populate('user', 'name -_id')
             .select({
                 _id: 0,
                 __v: 0,
             })
-            .limit(2);
+            .limit(5);
         console.log(getTodo);
         res.status(200).json({
             message: 'Find Todos!',
@@ -103,10 +105,24 @@ router.get('/:id', async (req, res) => {
     }
 });
 // post todo
-router.post('/', async (req, res) => {
-    const newTodo = new Todo(req.body);
+router.post('/', checkLogin, async (req, res) => {
+    const newTodo = new Todo({
+        ...req.body,
+        user: req.userId,
+    });
     try {
-        await newTodo.save();
+        const todo = await newTodo.save();
+        await User.updateOne(
+            {
+                _id: req.userId,
+            },
+            {
+                $push: {
+                    // eslint-disable-next-line no-underscore-dangle
+                    todos: todo._id,
+                },
+            }
+        );
         res.status(200).json({
             message: 'Todos was inserted successfully!',
         });
@@ -144,7 +160,7 @@ router.put('/:id', async (req, res) => {
             {
                 new: true,
                 useFindAndModify: false,
-            }
+            },
         );
         console.log(updatedTodo);
         res.status(200).json({
@@ -170,7 +186,7 @@ router.delete('/:id', async (req, res) => {
             },
             {
                 useFindAndModify: false,
-            }
+            },
         );
         console.log(deletedTodo);
         res.status(200).json({
